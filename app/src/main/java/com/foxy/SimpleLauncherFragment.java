@@ -1,6 +1,7 @@
 package com.foxy;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
@@ -65,13 +66,14 @@ public class SimpleLauncherFragment extends Fragment {
         recyclerView.setAdapter(new ActivityAdapter(activities));
     }
 
-    private class ActivityHolder extends RecyclerView.ViewHolder {
+    private class ActivityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ResolveInfo resolveInfo;
         private TextView nameTextView;
 
         public ActivityHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = (TextView) itemView;
+            nameTextView.setOnClickListener(this);
         }
 
         public void bind(ResolveInfo resolveInfo) {
@@ -79,6 +81,16 @@ public class SimpleLauncherFragment extends Fragment {
             PackageManager pm = getActivity().getPackageManager();
             String appName = this.resolveInfo.loadLabel(pm).toString();
             nameTextView.setText(appName);
+        }
+
+        // при нажатии на элемент списка откроется выбранное приложение
+        @Override
+        public void onClick(View v) {
+            ActivityInfo activityInfo = resolveInfo.activityInfo;
+
+            Intent intent = new Intent(Intent.ACTION_MAIN)
+                    .setClassName(activityInfo.applicationInfo.packageName, activityInfo.name);
+            startActivity(intent);
         }
     }
 
