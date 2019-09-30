@@ -89,7 +89,8 @@ public class SimpleLauncherFragment extends Fragment {
             ActivityInfo activityInfo = resolveInfo.activityInfo;
 
             Intent intent = new Intent(Intent.ACTION_MAIN)
-                    .setClassName(activityInfo.applicationInfo.packageName, activityInfo.name);
+                    .setClassName(activityInfo.applicationInfo.packageName, activityInfo.name)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // при запуске activity запускается новая задача
             startActivity(intent);
         }
     }
