@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,11 +70,13 @@ public class SimpleLauncherFragment extends Fragment {
     private class ActivityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ResolveInfo resolveInfo;
         private TextView nameTextView;
+        private ImageView icon;
 
         public ActivityHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = (TextView) itemView;
-            nameTextView.setOnClickListener(this);
+            nameTextView = itemView.findViewById(R.id.label);
+            icon = itemView.findViewById(R.id.icon);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(ResolveInfo resolveInfo) {
@@ -81,6 +84,7 @@ public class SimpleLauncherFragment extends Fragment {
             PackageManager pm = getActivity().getPackageManager();
             String appName = this.resolveInfo.loadLabel(pm).toString();
             nameTextView.setText(appName);
+            icon.setImageDrawable(resolveInfo.loadIcon(pm));
         }
 
         // при нажатии на элемент списка откроется выбранное приложение
@@ -106,7 +110,7 @@ public class SimpleLauncherFragment extends Fragment {
         @Override
         public ActivityHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            View view = inflater.inflate(R.layout.item_activity, parent, false);
             return new ActivityHolder(view);
         }
 
